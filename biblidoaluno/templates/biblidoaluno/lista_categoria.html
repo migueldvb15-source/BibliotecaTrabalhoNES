@@ -1,0 +1,24 @@
+{% extends 'biblidoaluno/base.html' %}
+
+{% block title %}Categoria: {{ nome_categoria }} | BiblioFácil{% endblock %}
+
+{% block content %}
+    <h2>Livros da Categoria: "{{ nome_categoria }}"</h2>
+    <p><a href="{% url 'biblidoaluno:home' %}">← Voltar para o Início</a></p>
+    <hr>
+
+    {% if livros %}
+        <ul>
+            {% for livro in livros %}
+                <li>
+                    <strong>{{ livro.titulo|upper }}</strong> - Autor: {{ livro.autor }} — 
+                    <a href="{% url 'biblidoaluno:detalhe_livro' pk=livro.id %}">Ver Detalhes</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Nenhum livro encontrado nesta categoria.</p>
+    {% endif %}
+
+    <!-- Nota sobre CSRF (Questão 6d): Como esta página apenas exibe dados (GET), não usa {% csrf_token %}. Ele seria obrigatório dentro de tags <form method="POST">. -->
+{% endblock %}

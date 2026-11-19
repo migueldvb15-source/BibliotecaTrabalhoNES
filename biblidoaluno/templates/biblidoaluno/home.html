@@ -1,0 +1,48 @@
+{% extends 'biblidoaluno/base.html' %}
+
+{% block content %}
+    <div style="margin-bottom: 20px;">
+        <a href="{% url 'biblidoaluno:cadastrar_livro' %}"><strong>[+ Cadastrar Livro]</strong></a> | 
+        <a href="{% url 'biblidoaluno:registrar_emprestimo' %}"><strong>[+ Novo Empréstimo]</strong></a>
+    </div>
+
+    <h2>Empréstimos em Andamento</h2>
+    {% if emprestimos_ativos %}
+        <ul>
+            {% for emp in emprestimos_ativos %}
+                <li>
+                    <strong>{{ emp.livro.titulo }}</strong> — Aluno: {{ emp.nome_aluno }} (Matrícula: {{ emp.matricula_aluno }}) | 
+                    Devolução prevista: {{ emp.data_devolucao_prevista|date:"d/m/Y" }}
+                    
+                    <form method="POST" action="{% url 'biblidoaluno:devolver_livro' pk=emp.id %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit">Devolver</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Nenhum empréstimo ativo no momento.</p>
+    {% endif %}
+
+    <hr>
+
+    <h2>Catálogo Geral de Livros</h2>
+    {% if livros %}
+        <ul>
+            {% for livro in livros %}
+                <li>
+                    <strong>{{ livro.titulo|upper }}</strong> ({{ livro.categoria }}) — 
+                    {% if livro.disponivel %}
+                        <span style="color: green;">Disponível</span>
+                    {% else %}
+                        <span style="color: red;">Emprestado</span>
+                    {% endif %}
+                    | <a href="{% url 'biblidoaluno:detalhe_livro' pk=livro.id %}">Ver Detalhes</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Nenhum livro cadastrado.</p>
+    {% endif %}
+{% endblock %}

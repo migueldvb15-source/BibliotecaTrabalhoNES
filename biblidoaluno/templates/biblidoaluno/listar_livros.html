@@ -1,0 +1,28 @@
+{% extends 'biblidoaluno/base.html' %}
+
+{% block title %}Catálogo de Livros - BiblioFácil{% endblock %}
+
+{% block content %}
+    <h1>Acervo da Biblioteca</h1>
+    <p><a href="{% url 'biblidoaluno:home' %}">← Voltar para o Início</a></p>
+    <hr>
+
+    <ul>
+        {% for livro in livros %}
+            <li>
+                <strong>Título:</strong> {{ livro.titulo|upper }} | 
+                <strong>Autor:</strong> {{ livro.autor }} | 
+                <strong>Categoria:</strong> {{ livro.categoria }} | 
+                <strong>Status:</strong> 
+                {% if livro.disponivel %}
+                    <span style="color: green;">Disponível</span>
+                {% else %}
+                    <span style="color: red;">Emprestado</span>
+                {% endif %}
+                — <a href="{% url 'biblidoaluno:detalhe_livro' pk=livro.id %}">Ver Detalhes</a>
+            </li>
+        {% empty %}
+            <li>Nenhum livro cadastrado no sistema até o momento.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

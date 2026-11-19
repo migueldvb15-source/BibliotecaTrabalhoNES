@@ -1,0 +1,26 @@
+{% extends 'biblidoaluno/base.html' %}
+
+{% block title %}{{ livro.titulo }} | Detalhes do Livro{% endblock %}
+
+{% block content %}
+    <section>
+        <h2>Detalhes da Obra</h2>
+        <p><a href="{% url 'biblidoaluno:home' %}">← Voltar para o Início</a></p>
+        <hr>
+
+        <article style="border: 1px solid #e0e0e0; padding: 20px; border-radius: 6px; background-color: #fafafa;">
+            <h3>{{ livro.titulo }}</h3>
+            <p><strong>Autor:</strong> {{ livro.autor }}</p>
+            <p><strong>Categoria:</strong> {{ livro.categoria }}</p>
+            <p><strong>Ano de Publicação:</strong> {{ livro.ano_publicacao }}</p>
+            <p>
+                <strong>Situação:</strong> 
+                {% if livro.disponivel %}
+                    <span style="color: green; font-weight: bold;">Disponível para retirada</span>
+                {% else %}
+                    <span style="color: red; font-weight: bold;">Exemplar Emprestado</span>
+                {% endif %}
+            </p>
+        </article>
+    </section>
+{% endblock %}

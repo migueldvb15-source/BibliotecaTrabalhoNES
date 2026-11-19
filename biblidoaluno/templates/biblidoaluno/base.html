@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}BiblioFácil - Sistema Escolar{% endblock %}</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 30px; line-height: 1.6; }
+        header { background: #2c3e50; color: white; padding: 15px 20px; border-radius: 4px; }
+        header h1 { margin: 0; font-size: 1.5rem; }
+        nav { margin-top: 10px; }
+        nav a { color: #ecf0f1; text-decoration: none; margin-right: 15px; font-weight: bold; }
+        nav a:hover { text-decoration: underline; }
+        main { margin-top: 25px; min-height: 300px; }
+        footer { margin-top: 40px; border-top: 1px solid #ccc; padding-top: 10px; font-size: 0.9em; color: #666; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>BiblioFácil</h1>
+        <nav>
+            <a href="{% url 'biblidoaluno:home' %}">Início</a>
+            <a href="{% url 'biblidoaluno:listar_por_categoria' 'Ficcao' %}">Ficção</a>
+            <a href="{% url 'biblidoaluno:listar_por_categoria' 'Didatico' %}">Didáticos</a>
+            <a href="{% url 'biblidoaluno:listar_por_categoria' 'Historia' %}">História</a>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Bloco de conteúdo principal herdado pelos templates filhos -->
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2026 BiblioFácil - Biblioteca Escolar. Todos os direitos reservados.</p>
+    </footer>
+</body>
+</html>

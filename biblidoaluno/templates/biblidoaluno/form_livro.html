@@ -1,0 +1,15 @@
+{% extends 'biblidoaluno/base.html' %}
+
+{% block title %}Cadastrar Livro | BiblioFácil{% endblock %}
+
+{% block content %}
+    <h2>Cadastrar Novo Livro no Acervo</h2>
+    <p><a href="{% url 'biblidoaluno:home' %}">← Voltar</a></p>
+    <hr>
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Salvar Livro</button>
+    </form>
+{% endblock %}
