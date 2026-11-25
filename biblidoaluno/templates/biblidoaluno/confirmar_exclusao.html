@@ -1,0 +1,14 @@
+{% extends 'biblidoaluno/base.html' %}
+{% block content %}
+<div class="card border-danger mx-auto" style="max-width: 500px;">
+    <div class="card-header bg-danger text-white"><h4 class="mb-0">Confirmar Exclusão</h4></div>
+    <div class="card-body">
+        <p>Tem certeza que deseja excluir permanentemente o livro <strong>{{ livro.titulo }}</strong>?</p>
+        <form method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Sim, Excluir</button>
+            <a href="{% url 'biblidoaluno:home' %}" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

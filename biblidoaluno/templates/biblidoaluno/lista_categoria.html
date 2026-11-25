@@ -11,7 +11,7 @@
         <ul>
             {% for livro in livros %}
                 <li>
-                    <strong>{{ livro.titulo|upper }}</strong> - Autor: {{ livro.autor }} — 
+                    <strong>{{ livro.titulo|upper }}</strong> - Autor: {{ livro.autor.nome }} — 
                     <a href="{% url 'biblidoaluno:detalhe_livro' pk=livro.id %}">Ver Detalhes</a>
                 </li>
             {% endfor %}

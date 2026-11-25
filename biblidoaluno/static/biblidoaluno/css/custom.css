@@ -1,0 +1,269 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+/* ════════════════════════════════════════════════════════════════
+   App Design Tokens – CSS Custom Properties
+   ════════════════════════════════════════════════════════════════ */
+:root {
+  /* ── Brand ──────────────────────────────────────────────── */
+  --brand-maroon: #680434;
+  --brand-gold:   #d0bc84;
+
+  /* ── Primary (Wine) ────────────────────────────────────── */
+  --color-primary:       #680434;
+  --color-primary-dark:  #4d0225;
+  --color-primary-light: rgba(104, 4, 52, 0.12);
+
+  /* ── Semantic ───────────────────────────────────────────── */
+  --color-danger:       #dc2626;
+  --color-danger-bg:    #fef2f2;
+  --color-danger-light: rgba(220, 38, 38, 0.12);
+
+  --color-recovery:     #b91c1c;
+  --color-low-score:    #FAA0A0;
+  --color-high-score:   #C1E1C1;
+
+  --color-success:    #16a34a;
+  --color-success-bg: #f0fdf4;
+
+  /* ── Text ───────────────────────────────────────────────── */
+  --color-text:         #1a0a10;
+  --color-text-body:    #3d1a25;
+  --color-text-heading: #5c2a3a;
+  --color-text-muted:   #9a7a84;
+
+  /* ── Surfaces & Borders ─────────────────────────────────── */
+  --color-surface:  #fffcf5;
+  --color-bg:       #FFF8E7;
+  --color-bg-alt:   #FFFDF0;
+  --color-bg-hover: #FFF5D6;
+  --color-border:   #e8d5c4;
+  --color-scrollbar-thumb: #d4bfb0;
+
+  /* ── Footer / Timer ─────────────────────────────────────── */
+  --color-footer-bg:       #1a0a10;
+  --color-timer-warning:   #d97706;
+  --color-timer-critical:  #dc2626;
+  --color-timer-expired:   #991b1b;
+
+  /* ── Typography ─────────────────────────────────────────── */
+  --font-family: 'Roboto', 'Helvetica Neue', sans-serif;
+  --fs-xs:   0.65rem;
+  --fs-sm:   0.7rem;
+  --fs-md:   0.75rem;
+  --fs-base: 0.875rem;
+  --fs-btn:  0.9rem;
+  --fs-lg:   1.5rem;
+
+  /* ── Border Radius ──────────────────────────────────────── */
+  --radius-input: 6px;
+  --radius-btn:   10px;
+  --radius-card:  12px;
+  --radius-pill:  999px;
+  --radius-round: 50%;
+
+  /* ── Shadows ────────────────────────────────────────────── */
+  --shadow-card:       0 1px 3px rgba(26, 10, 16, 0.06),
+                       0 4px 16px rgba(26, 10, 16, 0.05);
+  --shadow-btn:        0 2px 6px rgba(104, 4, 52, 0.25);
+  --shadow-btn-hover:  0 6px 16px rgba(104, 4, 52, 0.35);
+  --shadow-focus:      0 0 0 3px rgba(104, 4, 52, 0.15);
+  --shadow-focus-err:  0 0 0 3px rgba(220, 38, 38, 0.12);
+
+  /* ── Spacing & Layout ───────────────────────────────────── */
+  --space-page:   24px 32px;
+  --space-inset:  20px;
+  --max-width-page: 1400px;
+  --header-height: 60px;
+
+  /* ── Transitions ────────────────────────────────────────── */
+  --transition-input: border-color 0.15s ease, box-shadow 0.15s ease;
+  --transition-btn:   transform 0.1s ease, box-shadow 0.15s ease;
+
+  /* ── Integração com Bootstrap 5 ─────────────────────────── */
+  --bs-primary: var(--color-primary);
+  --bs-primary-rgb: 104, 4, 52;
+  --bs-body-bg: var(--color-bg);
+  --bs-body-color: var(--color-text-body);
+  --bs-border-color: var(--color-border);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   Estilos Globais e Sobrescritas de Layout
+   ════════════════════════════════════════════════════════════════ */
+body {
+  background-color: var(--color-bg) !important;
+  color: var(--color-text-body);
+  font-family: var(--font-family);
+  margin: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--color-text-heading);
+  font-weight: 700;
+}
+
+.text-muted {
+  color: var(--color-text-muted) !important;
+}
+
+/* Navbar (Topo Vinho com Detalhes em Dourado) */
+.navbar-brand-custom {
+  background-color: var(--brand-maroon) !important;
+  border-bottom: 3px solid var(--brand-gold);
+  min-height: var(--header-height);
+}
+
+.navbar-brand-custom .navbar-brand {
+  color: var(--brand-gold) !important;
+  letter-spacing: 0.5px;
+}
+
+.navbar-brand-custom .nav-link {
+  color: var(--color-surface) !important;
+  transition: color 0.15s ease;
+}
+
+.navbar-brand-custom .nav-link:hover {
+  color: var(--brand-gold) !important;
+}
+
+/* Superfícies, Cards e Tabelas */
+.surface-card,
+.card {
+  background-color: var(--color-surface) !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: var(--radius-card) !important;
+  box-shadow: var(--shadow-card) !important;
+}
+
+.card-header-custom {
+  background-color: var(--color-primary) !important;
+  color: var(--color-surface) !important;
+  border-bottom: 2px solid var(--brand-gold) !important;
+  border-top-left-radius: calc(var(--radius-card) - 1px) !important;
+  border-top-right-radius: calc(var(--radius-card) - 1px) !important;
+}
+
+.table {
+  --bs-table-bg: var(--color-surface);
+  --bs-table-hover-bg: var(--color-bg-hover);
+  border-color: var(--color-border);
+  color: var(--color-text-body);
+}
+
+.table thead th {
+  background-color: var(--color-bg-alt) !important;
+  color: var(--color-text-heading);
+  border-bottom: 2px solid var(--color-border);
+}
+
+/* Botões */
+.btn {
+  border-radius: var(--radius-btn);
+  font-size: var(--fs-btn);
+  transition: var(--transition-btn);
+}
+
+.btn-primary {
+  background-color: var(--color-primary) !important;
+  border-color: var(--color-primary) !important;
+  color: #ffffff !important;
+  box-shadow: var(--shadow-btn);
+}
+
+.btn-primary:hover, .btn-primary:focus {
+  background-color: var(--color-primary-dark) !important;
+  border-color: var(--color-primary-dark) !important;
+  box-shadow: var(--shadow-btn-hover);
+  transform: translateY(-1px);
+}
+
+.btn-gold {
+  background-color: var(--brand-gold) !important;
+  border-color: var(--brand-gold) !important;
+  color: var(--color-text) !important;
+  font-weight: 600;
+}
+
+.btn-gold:hover {
+  background-color: #c2ab6e !important;
+}
+
+.btn-success {
+  background-color: var(--color-success) !important;
+  border-color: var(--color-success) !important;
+}
+
+.btn-danger {
+  background-color: var(--color-danger) !important;
+  border-color: var(--color-danger) !important;
+}
+
+/* Badges (Etiquetas de Status) */
+.badge {
+  border-radius: var(--radius-pill);
+  padding: 0.4em 0.8em;
+}
+
+.badge-disponivel {
+  background-color: var(--color-high-score);
+  color: #14532d;
+}
+
+.badge-emprestado {
+  background-color: var(--color-low-score);
+  color: #7f1d1d;
+}
+
+.badge-categoria {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+  border: 1px solid rgba(104, 4, 52, 0.25);
+}
+
+/* Inputs e Formulários */
+.form-control, .form-select {
+  background-color: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-input);
+  color: var(--color-text);
+  transition: var(--transition-input);
+}
+
+.form-control:focus, .form-select:focus {
+  background-color: #ffffff;
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-focus);
+}
+
+/* Alertas Semânticos */
+.alert-success {
+  background-color: var(--color-success-bg);
+  border-color: var(--color-high-score);
+  color: #14532d;
+}
+
+.alert-danger, .alert-error {
+  background-color: var(--color-danger-bg);
+  border-color: var(--color-low-score);
+  color: var(--color-recovery);
+}
+
+/* Rodapé */
+.footer-custom {
+  background-color: var(--color-footer-bg) !important;
+  color: var(--brand-gold);
+  border-top: 2px solid var(--brand-maroon);
+}
+
+/* Barra de rolagem personalizada */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-scrollbar-thumb);
+  border-radius: var(--radius-pill);
+}

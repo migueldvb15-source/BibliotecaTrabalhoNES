@@ -1,0 +1,13 @@
+{% extends 'biblidoaluno/base.html' %}
+{% block content %}
+<div class="card shadow-sm mx-auto" style="max-width: 450px;">
+    <div class="card-header card-header-custom"><h4 class="mb-0">Criar Nova Conta</h4></div>
+    <div class="card-body">
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-success w-100">Concluir Cadastro</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

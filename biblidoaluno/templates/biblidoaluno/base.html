@@ -1,39 +1,101 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}BiblioFácil - Sistema Escolar{% endblock %}</title>
+    <title>{% block title %}BiblioFácil | Acervo Escolar{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'biblidoaluno/css/custom.css' %}">
     <style>
-        body { font-family: Arial, sans-serif; margin: 30px; line-height: 1.6; }
-        header { background: #2c3e50; color: white; padding: 15px 20px; border-radius: 4px; }
-        header h1 { margin: 0; font-size: 1.5rem; }
-        nav { margin-top: 10px; }
-        nav a { color: #ecf0f1; text-decoration: none; margin-right: 15px; font-weight: bold; }
-        nav a:hover { text-decoration: underline; }
-        main { margin-top: 25px; min-height: 300px; }
-        footer { margin-top: 40px; border-top: 1px solid #ccc; padding-top: 10px; font-size: 0.9em; color: #666; }
+        /* Garante as cores exatas mesmo antes do collectstatic no Render */
+        :root {
+            --brand-maroon: #680434;
+            --brand-gold: #d0bc84;
+            --color-bg: #FFF8E7;
+            --color-surface: #fffcf5;
+            --color-text: #1a0a10;
+            --color-text-heading: #5c2a3a;
+            --color-border: #e8d5c4;
+        }
+        body { background-color: var(--color-bg) !important; color: var(--color-text); font-family: 'Roboto', sans-serif; }
+        .brand-title { font-family: 'Cinzel', serif; letter-spacing: 1px; color: var(--brand-gold) !important; }
+        .navbar-custom { background-color: var(--brand-maroon) !important; border-bottom: 3px solid var(--brand-gold); }
+        .navbar-custom .nav-link { color: #fffcf5 !important; font-weight: 500; }
+        .navbar-custom .nav-link:hover { color: var(--brand-gold) !important; }
+        .hero-banner {
+            background: linear-gradient(135deg, #680434 0%, #4d0225 100%);
+            color: #fffcf5;
+            border-bottom: 4px solid var(--brand-gold);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 16px rgba(26, 10, 16, 0.12);
+        }
+        .btn-maroon { background-color: #680434; border-color: #680434; color: #fff; border-radius: 10px; }
+        .btn-maroon:hover { background-color: #4d0225; color: var(--brand-gold); }
+        .btn-gold { background-color: #d0bc84; border-color: #d0bc84; color: #1a0a10; font-weight: 600; border-radius: 10px; }
+        .btn-gold:hover { background-color: #bfa86a; color: #1a0a10; }
+        .card-acervo {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(26, 10, 16, 0.05);
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .card-acervo:hover { transform: translateY(-3px); box-shadow: 0 6px 18px rgba(104, 4, 52, 0.12); }
+        .footer-custom { background-color: #1a0a10; color: var(--brand-gold); border-top: 3px solid var(--brand-maroon); }
     </style>
 </head>
-<body>
-    <header>
-        <h1>BiblioFácil</h1>
-        <nav>
-            <a href="{% url 'biblidoaluno:home' %}">Início</a>
-            <a href="{% url 'biblidoaluno:listar_por_categoria' 'Ficcao' %}">Ficção</a>
-            <a href="{% url 'biblidoaluno:listar_por_categoria' 'Didatico' %}">Didáticos</a>
-            <a href="{% url 'biblidoaluno:listar_por_categoria' 'Historia' %}">História</a>
-        </nav>
-    </header>
+<body class="d-flex flex-column min-vh-100">
 
-    <main>
-        <!-- Bloco de conteúdo principal herdado pelos templates filhos -->
-        {% block content %}
-        {% endblock %}
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom shadow-sm py-2">
+        <div class="container">
+            <a class="navbar-brand fw-bold brand-title fs-4" href="{% url 'biblidoaluno:home' %}">BIBLIOFÁCIL</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="menuNav">
+                <ul class="navbar-nav me-auto ms-lg-3">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'biblidoaluno:home' %}">Início</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'biblidoaluno:listar_por_categoria' 'Ficcao' %}">Ficção</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'biblidoaluno:listar_por_categoria' 'Didatico' %}">Didáticos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'biblidoaluno:listar_por_categoria' 'Historia' %}">História</a></li>
+                </ul>
+                <div class="d-flex align-items-center gap-2">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'biblidoaluno:registrar_emprestimo' %}" class="btn btn-gold btn-sm">+ Novo Empréstimo</a>
+                        <span class="text-white small ms-2 me-1">Olá, <strong style="color: var(--brand-gold);">{{ user.username }}</strong></span>
+                        <form method="POST" action="{% url 'biblidoaluno:logout' %}" class="m-0">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-light btn-sm">Sair</button>
+                        </form>
+                    {% else %}
+                        <a href="{% url 'biblidoaluno:login' %}" class="btn btn-gold btn-sm">Entrar</a>
+                        <a href="{% url 'biblidoaluno:cadastro' %}" class="btn btn-outline-light btn-sm">Cadastrar</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container my-4 flex-grow-1">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show shadow-sm">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {% block content %}{% endblock %}
     </main>
 
-    <footer>
-        <p>&copy; 2026 BiblioFácil - Biblioteca Escolar. Todos os direitos reservados.</p>
+    <footer class="footer-custom text-center py-3 mt-auto">
+        <small>BiblioFácil © 2026 — Sistema de Gestão Bibliotecária</small>
     </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

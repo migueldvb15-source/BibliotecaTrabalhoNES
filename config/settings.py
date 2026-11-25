@@ -1,5 +1,9 @@
 from pathlib import Path
 
+import os
+SECRET_KEY = os.environ.get('SECRET_KEY', 'chave-desenvolvimento-biblioteca')
+DEBUG = os.environ.get('DEBUG', 'TRUE') == 'True'
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -116,3 +120,7 @@ MAILERS = {
         'BACKEND': 'django.core.mail.backends.console.EmailBackend',
     },
 }
+
+LOGIN_URL = 'biblidoaluno:login'
+LOGIN_REDIRECT_URL = 'biblidoaluno:home'
+LOGOUT_REDIRECT_URL = 'biblidoaluno:home'

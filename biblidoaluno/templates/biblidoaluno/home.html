@@ -1,48 +1,113 @@
 {% extends 'biblidoaluno/base.html' %}
 
 {% block content %}
-    <div style="margin-bottom: 20px;">
-        <a href="{% url 'biblidoaluno:cadastrar_livro' %}"><strong>[+ Cadastrar Livro]</strong></a> | 
-        <a href="{% url 'biblidoaluno:registrar_emprestimo' %}"><strong>[+ Novo Empréstimo]</strong></a>
+    <!-- Banner Superior -->
+    <div class="hero-banner mb-4">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <span class="badge mb-2" style="background-color: var(--brand-gold); color: #1a0a10;">ACERVO DIGITAL</span>
+                <h1 class="fw-bold mb-2" style="font-family: 'Cinzel', serif; color: #fffcf5;">Biblioteca Escolar</h1>
+                <p class="mb-3 opacity-75">Consulte obras disponíveis, pesquise por autor ou categoria e acompanhe os empréstimos ativos.</p>
+                <div class="d-flex gap-3 small">
+                    <span>📚 <strong>{{ livros|length }}</strong> obras no catálogo</span>
+                    <span>✅ <strong>{{ livros_disponiveis_count }}</strong> disponíveis agora</span>
+                </div>
+            </div>
+            <div class="col-lg-5 mt-3 mt-lg-0">
+                <form method="GET" class="d-flex bg-white p-2 rounded-3 shadow-sm">
+                    <input type="text" name="busca" class="form-control border-0 shadow-none" placeholder="Buscar título, autor ou categoria..." value="{{ busca }}">
+                    <button type="submit" class="btn btn-maroon px-4">Buscar</button>
+                    {% if busca %}
+                        <a href="{% url 'biblidoaluno:home' %}" class="btn btn-outline-secondary ms-1">✕</a>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
     </div>
 
-    <h2>Empréstimos em Andamento</h2>
-    {% if emprestimos_ativos %}
-        <ul>
-            {% for emp in emprestimos_ativos %}
-                <li>
-                    <strong>{{ emp.livro.titulo }}</strong> — Aluno: {{ emp.nome_aluno }} (Matrícula: {{ emp.matricula_aluno }}) | 
-                    Devolução prevista: {{ emp.data_devolucao_prevista|date:"d/m/Y" }}
-                    
-                    <form method="POST" action="{% url 'biblidoaluno:devolver_livro' pk=emp.id %}" style="display:inline;">
-                        {% csrf_token %}
-                        <button type="submit">Devolver</button>
-                    </form>
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>Nenhum empréstimo ativo no momento.</p>
-    {% endif %}
+    <!-- Grade de Livros em Cards -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="fw-bold m-0" style="color: #5c2a3a;">Catálogo Geral de Livros</h3>
+        {% if user.is_staff %}
+            <a href="/admin/biblidoaluno/livro/add/" class="btn btn-sm btn-outline-dark">Gerenciar Acervo (Admin)</a>
+        {% endif %}
+    </div>
 
-    <hr>
+    <div class="row g-4 mb-5">
+        {% for livro in livros %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card card-acervo h-100 p-3 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <span class="badge rounded-pill" style="background-color: rgba(104, 4, 52, 0.12); color: #680434;">
+                                {{ livro.categoria }}
+                            </span>
+                            {% if livro.disponivel %}
+                                <span class="badge rounded-pill" style="background-color: #C1E1C1; color: #14532d;">Disponível</span>
+                            {% else %}
+                                <span class="badge rounded-pill" style="background-color: #FAA0A0; color: #7f1d1d;">Emprestado</span>
+                            {% endif %}
+                        </div>
+                        <h5 class="fw-bold mt-2 mb-1" style="color: #1a0a10;">{{ livro.titulo|upper }}</h5>
+                        <p class="text-muted small mb-3">Autor: <strong>{{ livro.autor.nome }}</strong> • {{ livro.ano_publicacao }}</p>
+                    </div>
 
-    <h2>Catálogo Geral de Livros</h2>
-    {% if livros %}
-        <ul>
-            {% for livro in livros %}
-                <li>
-                    <strong>{{ livro.titulo|upper }}</strong> ({{ livro.categoria }}) — 
-                    {% if livro.disponivel %}
-                        <span style="color: green;">Disponível</span>
-                    {% else %}
-                        <span style="color: red;">Emprestado</span>
-                    {% endif %}
-                    | <a href="{% url 'biblidoaluno:detalhe_livro' pk=livro.id %}">Ver Detalhes</a>
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>Nenhum livro cadastrado.</p>
-    {% endif %}
+                    <div class="pt-2 border-top d-flex justify-content-between align-items-center" style="border-color: #e8d5c4 !important;">
+                        <a href="{% url 'biblidoaluno:detalhe_livro' pk=livro.id %}" class="btn btn-sm btn-maroon">Ver Detalhes</a>
+                        
+                        {% if user.is_staff %}
+                            <div class="btn-group">
+                                <a href="{% url 'biblidoaluno:editar_livro' pk=livro.id %}" class="btn btn-sm btn-outline-secondary">Editar</a>
+                                <a href="{% url 'biblidoaluno:excluir_livro' pk=livro.id %}" class="btn btn-sm btn-outline-danger">Excluir</a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <div class="card-acervo p-4 text-center text-muted">Nenhum livro encontrado no catálogo.</div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Empréstimos em Andamento -->
+    <h4 class="fw-bold mb-3" style="color: #5c2a3a;">Empréstimos em Andamento</h4>
+    <div class="card-acervo p-3">
+        {% if emprestimos_ativos %}
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead>
+                        <tr style="color: #5c2a3a;">
+                            <th>Obra</th>
+                            <th>Aluno</th>
+                            <th>Matrícula</th>
+                            <th>Devolução Prevista</th>
+                            {% if user.is_authenticated %}<th class="text-end">Ação</th>{% endif %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for emp in emprestimos_ativos %}
+                        <tr>
+                            <td><strong>{{ emp.livro.titulo }}</strong></td>
+                            <td>{{ emp.nome_aluno }}</td>
+                            <td>{{ emp.matricula_aluno }}</td>
+                            <td>{{ emp.data_devolucao_prevista|date:"d/m/Y" }}</td>
+                            {% if user.is_authenticated %}
+                                <td class="text-end">
+                                    <form method="POST" action="{% url 'biblidoaluno:devolver_livro' pk=emp.id %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-gold">Devolver</button>
+                                    </form>
+                                </td>
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="text-muted mb-0">Nenhum empréstimo ativo no momento.</p>
+        {% endif %}
+    </div>
 {% endblock %}
